@@ -150,15 +150,24 @@ class ColouringPad(Frame):
         menu_edit = Menu(menubar)
         menubar.add_cascade(menu=menu_file, label='File', underline=0)
         menubar.add_cascade(menu=menu_edit, label='Edit', underline=0)
-        menu_file.add_command(label='Load...', command=self.load, underline=0, accelerator="ctrl+L")
-        menu_file.add_command(label='Save...', command=self.save, underline=0, accelerator="ctrl+S")
-        menu_file.add_command(label='Adjust', command=self.adjust, underline=0, accelerator="ctrl+a")
-        menu_file.add_command(label='Exit', command=self.exit, underline=1, accelerator="ctrl+X")
-        menu_edit.add_command(label='Undo', command=self.undo, accelerator="ctrl+Z")
-        menu_edit.add_command(label='Change colour', command=self.colourChange, underline=7, accelerator="ctrl+C")
-        menu_edit.add_command(label='Mode - Fill', command=self.setFill, underline=7, accelerator="ctrl+F")
-        menu_edit.add_command(label='Mode - Fix', command=self.setFix, underline=8, accelerator="ctrl+I")
-        menu_edit.add_command(label='Info', command=self.info, underline=4, accelerator="ctrl+O")
+        menu_file.add_command(label='Load...', command=self.load, 
+                              underline=0, accelerator="ctrl+L")
+        menu_file.add_command(label='Save...', command=self.save, 
+                              underline=0, accelerator="ctrl+S")
+        menu_file.add_command(label='Adjust', command=self.adjust, 
+                              underline=0, accelerator="ctrl+a")
+        menu_file.add_command(label='Exit', command=self.exit, 
+                              underline=1, accelerator="ctrl+X")
+        menu_edit.add_command(label='Undo', command=self.undo, 
+                              accelerator="ctrl+Z")
+        menu_edit.add_command(label='Change colour', command=self.colourChange, 
+                              underline=7, accelerator="ctrl+C")
+        menu_edit.add_command(label='Mode - Fill', command=self.setFill, 
+                              underline=7, accelerator="ctrl+F")
+        menu_edit.add_command(label='Mode - Fix', command=self.setFix, 
+                              underline=8, accelerator="ctrl+I")
+        menu_edit.add_command(label='Info', command=self.info, 
+                              underline=4, accelerator="ctrl+O")
         # Add keyboard short cuts
         frame.bind("<Control-l>", lambda event: self.load())
         frame.bind("<Control-s>", lambda event: self.save())
@@ -181,7 +190,9 @@ class ColouringPad(Frame):
         v.grid(column=col + 1, row=row, sticky=(N, S))
         self.canvas = Canvas(frame, scrollregion=(0, 0, width, height),
                                yscrollcommand=v.set, xscrollcommand=h.set,
-                               borderwidth=2, relief="groove")  # raised, sunken, flat, ridge, solid, and groove (width=3000, height=3000,)
+                               borderwidth=2, relief="groove")  
+        # alternatives are: raised, sunken, flat, ridge, solid, and groove 
+        # and (width=3000, height=3000,)
         self.canvas.grid(column=col, row=row, sticky=(N, W, E, S))
         h['command'] = self.canvas.xview
         v['command'] = self.canvas.yview
@@ -195,19 +206,27 @@ class ColouringPad(Frame):
         frame = self.frame
         buttonCol, buttonWidth = 1, 2
         self.buttonStrip = Frame(frame) 
-        self.buttonStrip.grid(column=buttonCol, row=buttonRow, columnspan=buttonWidth, sticky=(N, E, W, S))
+        self.buttonStrip.grid(column=buttonCol, row=buttonRow, 
+                              columnspan=buttonWidth, sticky=(N, E, W, S))
         # define
-        self.buttonLoad = Button(self.buttonStrip, text="Load", underline=0, command=self.load)
-        self.buttonSave = Button(self.buttonStrip, text="Save", underline=0, command=self.save)
-        self.buttonQuit = Button(self.buttonStrip, text="Exit", underline=1, command=self.exit)
+        self.buttonLoad = Button(self.buttonStrip, text="Load", 
+                                 underline=0, command=self.load)
+        self.buttonSave = Button(self.buttonStrip, text="Save", 
+                                 underline=0, command=self.save)
+        self.buttonQuit = Button(self.buttonStrip, text="Exit", 
+                                 underline=1, command=self.exit)
         self.buttonZoom = Label(self.buttonStrip, text="Zoom")
-        self.buttonSpin = Scale(self.buttonStrip, from_=1, to=14, label="Zooom", showvalue=0,
-                                  repeatdelay=1000, repeatinterval=1000,
-                                  command=self.zoomed, orient=HORIZONTAL)
+        self.buttonSpin = Scale(self.buttonStrip, from_=1, to=14, 
+                                label="Zooom", showvalue=0,
+                                repeatdelay=1000, repeatinterval=1000, 
+                                command=self.zoomed, orient=HORIZONTAL)
         self.buttonMode = Label(self.buttonStrip, text="Mode")
-        self.buttonFill = Radiobutton(self.buttonStrip, variable=self.mode, text="Fill", value=1)
-        self.buttonFix = Radiobutton(self.buttonStrip, variable=self.mode, text="Fix", value=0)
-        self.buttonDropper = Radiobutton(self.buttonStrip, variable=self.mode, text="Dropper", value=2)
+        self.buttonFill = Radiobutton(self.buttonStrip, variable=self.mode, 
+                                      text="Fill", value=1)
+        self.buttonFix = Radiobutton(self.buttonStrip, variable=self.mode, 
+                                     text="Fix", value=0)
+        self.buttonDropper = Radiobutton(self.buttonStrip, variable=self.mode, 
+                                         text="Dropper", value=2)
         # arrange
         self.buttonLoad.grid(column=1, row=0, pady=5, padx=5)
         self.buttonSave.grid(column=2, row=0, pady=5, padx=5)
@@ -228,7 +247,8 @@ class ColouringPad(Frame):
         frame = self.frame
         buttonCol, buttonWidth, buttonRow = 1, 2, self.colourRow
         self.colourStrip = Frame(frame) 
-        self.colourStrip.grid(column=buttonCol, row=buttonRow, columnspan=buttonWidth, sticky=(N, E, W, S))
+        self.colourStrip.grid(column=buttonCol, row=buttonRow, 
+                              columnspan=buttonWidth, sticky=(N, E, W, S))
         self.colours = []
         self.colourSelected.set(0)  # initialise
         self.chosen = self.used[0]
@@ -238,8 +258,9 @@ class ColouringPad(Frame):
                 colour = self.used[i]
             else:
                 colour = "white"
-            b = Radiobutton(self.colourStrip, variable=self.colourSelected, text=" ",
-                             value=i, bg=colour, selectcolor=colour, indicatoron=0, command=self.colourSet)
+            b = Radiobutton(self.colourStrip, variable=self.colourSelected, 
+                            text=" ", value=i, bg=colour, selectcolor=colour, 
+                            indicatoron=0, command=self.colourSet)
             b.grid(column=i, row=0)
             b.bind("<Double-Button-1>", self.colour)
             self.colours.append(b)
@@ -277,7 +298,8 @@ class ColouringPad(Frame):
         self.resize()
         if not self.ok:
             self.ok = True
-            # print("Zoomed not ok, so try and set from:", self.zoom, "to:", self.zoom / 2)
+            # print("Zoomed not ok, so try and set from:", \
+            # self.zoom, "to:", self.zoom / 2)
             # self.buttonSpin.set(self.buttonSpin.get() - 1)
         self.buttonSpin.configure(state="normal")
         # print("zoomed-ret")
@@ -329,7 +351,8 @@ class ColouringPad(Frame):
 
     def exit(self):
         if not self.saved:
-            response = PadConfirm("Unsaved picture! \nDo you want to quit without saving it?")
+            response = PadConfirm("Unsaved picture! \n" 
+                                  "Do you want to quit without saving it?")
             if response:
                 self._quit()
         else:
@@ -350,8 +373,12 @@ class ColouringPad(Frame):
         widget = self.canvas
         # print("Canvas: width", widget.winfo_width(),
         #       "rootx", widget.winfo_rootx(),
-        #       "xview", widget.xview(), (self.image.width*widget.xview()[0], self.image.width*widget.xview()[1]))
-        # print("1.0 - widget.xview()[1]", 1.0 - widget.xview()[1], ((1.0 - widget.xview()[1]) > 0.01))
+        #       "xview", widget.xview(), 
+        #       (self.image.width*widget.xview()[0], 
+        #       self.image.width*widget.xview()[1]))
+        # print("1.0 - widget.xview()[1]", 
+        #       1.0 - widget.xview()[1], 
+        #       ((1.0 - widget.xview()[1]) > 0.01))
         while ((1.0 - widget.xview()[1]) > 0.01):
             s = input('--> ')
             if len(s) > 0:
@@ -361,13 +388,18 @@ class ColouringPad(Frame):
             self.frame.update_idletasks()
             # print("Canvas: width", widget.winfo_width(),
             #       "rootx", widget.winfo_rootx(),
-            #       "xview", widget.xview(), (self.image.width*widget.xview()[0], self.image.width*widget.xview()[1]))
-            # print("1.0 - widget.xview()[1]", 1.0 - widget.xview()[1], ((1.0 - widget.xview()[1]) > 0.01))
+            #       "xview", widget.xview(), 
+            #       (self.image.width*widget.xview()[0],  
+            #       self.image.width*widget.xview()[1]))
+            # print("1.0 - widget.xview()[1]",  
+            #       1.0 - widget.xview()[1],  
+            #       ((1.0 - widget.xview()[1]) > 0.01))
         return
 
     def load(self):
         if not self.saved:
-            response = PadConfirm("Unsaved picture! \nDo you want to load without saving it?")
+            response = PadConfirm("Unsaved picture! \n"
+                                  "Do you want to load without saving it?")
             if response:
                 self._load()
         else:
@@ -375,8 +407,15 @@ class ColouringPad(Frame):
         return
 
     def _load(self):
-        self.filename = filedialog.askopenfilename(initialdir=self.lastdir, title="Load picture",
-                                                     filetypes=(("picture files", "*.png"), ("all files", "*.*")))
+        self.filename = filedialog.askopenfilename(initialdir=self.lastdir, 
+                                                   title="Load picture",
+                                                   filetypes=(
+                                                       ("picture files", 
+                                                        "*.png"), 
+                                                       ("all files", 
+                                                        "*.*")
+                                                       )
+                                                   )
         self.loadFile()
         return
 
@@ -400,7 +439,8 @@ class ColouringPad(Frame):
             if colours:
                 for i in range(len(colours)):
                     if colours[i][0] > enough:
-                        used.append("#%02x%02x%02x" % colours[i][1][0:3])  # make minimum list of colours in #rrggbb format
+                        # make minimum list of colours in #rrggbb format
+                        used.append("#%02x%02x%02x" % colours[i][1][0:3])  
                         count += 1
             # print("count", count)
             if count < len(self.defaultColours):
@@ -428,13 +468,18 @@ class ColouringPad(Frame):
         self.undoSaved = False
         self.addColours()
         self.canvas = None  # new image, new canvas
-        w, h = (self.frame.winfo_width(), self.frame.winfo_height() - self.buttonStrip.winfo_height() - self.colourStrip.winfo_height())
+        w = self.frame.winfo_width()
+        h = (self.frame.winfo_height() 
+             - self.buttonStrip.winfo_height() 
+             - self.colourStrip.winfo_height()
+             )
         width, height = self.image.size
         if w < 2 or h < 2:
             w, h = (width, height)
         rw, rh = (w / width, h / height)
         ratio = min(1, rw, rh)
-        # print("setImage: (width, height)", (width, height), "w, h", (w, h), "rw, rh", (rw, rh))
+        # print("setImage: (width, height)", (width, height), 
+        #       "w, h", (w, h), "rw, rh", (rw, rh))
         self.setZoom(ratio * 100)
         # print("setImage after setZoom")
         self.resize()
@@ -456,7 +501,8 @@ class ColouringPad(Frame):
             y = (widget.yview()[0] + widget.yview()[1]) / 2
             w = widget.xview()[1] - widget.xview()[0]
             h = widget.yview()[1] - widget.yview()[0]
-            # print("resize() before:", ratio, (x, y), (x * self.image.width, y * self.image.height), (w, h))
+            # print("resize() before:", ratio, (x, y), 
+            #       (x * self.image.width, y * self.image.height), (w, h))
             # x,y is middle before zoom as fraction of 1
         '''
         self.show()
@@ -468,7 +514,8 @@ class ColouringPad(Frame):
             # w, h new size as fraction of 1
             x = max(x - w/2, 0)
             y = max(y - h/2, 0)
-            # print("resize() taget:", ratio, (x, y), (x * self.image.width, y * self.image.height), (w, h))
+            # print("resize() taget:", ratio, (x, y), 
+            #       (x * self.image.width, y * self.image.height), (w, h))
             # x, y new top left (ensuring on picture)
             widget.xview_moveto(x)
             widget.yview_moveto(y)
@@ -476,7 +523,8 @@ class ColouringPad(Frame):
             h = widget.yview()[1] - widget.yview()[0]
             x = (widget.xview()[0] + widget.xview()[1]) / 2
             y = (widget.yview()[0] + widget.yview()[1]) / 2
-            # print("resize() after:", ratio, (x, y), (x * self.image.width, y * self.image.height), (w, h))
+            # print("resize() after:", ratio, (x, y), 
+            #       (x * self.image.width, y * self.image.height), (w, h))
             # image re-centred!
         '''
         # print("resize-ret")
@@ -509,7 +557,10 @@ class ColouringPad(Frame):
             # try and recover ...
             gc.collect()
         if self.ok:
-            self.canvas.create_image((self.width / 2 + 1, self.height / 2 + 1), image=self.picture)
+            self.canvas.create_image(
+                (self.width / 2 + 1, 
+                 self.height / 2 + 1), 
+                image=self.picture)
         wait.quit()
         # print("display-ret")
         return
@@ -517,16 +568,20 @@ class ColouringPad(Frame):
     def adjust(self):
         fudge = 2
         w, h = self.image.size
-        image = self.image.resize((int(w / fudge), int(h / fudge)), resample=Image.BOX)  # shrink to merge lines (fudge)
+        image = self.image.resize(
+            (int(w / fudge), 
+             int(h / fudge)), 
+            resample=Image.BOX)  # shrink to merge lines (fudge)
         self.image = image.resize((w, h))  # restore size
         self.show()
         return
 
     def save(self):
         if self.image:
-            self.filename = filedialog.asksaveasfilename(initialdir=self.lastdir, title="Save picture",
-                                                          filetypes=(("picture files", "*.png"), ("all files", "*.*")),
-                                                          defaultextension=".png")
+            self.filename = filedialog.asksaveasfilename(
+                initialdir=self.lastdir, title="Save picture",
+                filetypes=(("picture files", "*.png"), ("all files", "*.*")), 
+                defaultextension=".png")
             if self.filename != "":
                 self.lastdir = os.path.dirname(self.filename)
                 self.image.save(self.filename)
@@ -552,7 +607,8 @@ class ColouringPad(Frame):
         if not target:
             return  # nothing to do
         colour = ImageColor.getcolor(self.chosen, self.image.mode)
-        # print("target", target, "(x, y)", (x, y), "chosen", self.chosen, "colour", colour)
+        # print("target", target, "(x, y)", (x, y), 
+        #       "chosen", self.chosen, "colour", colour)
         if self.mode.get() == 1:  # fill
             self.lastMode = self.mode.get()
             self.canvas.config(cursor="watch")
@@ -567,7 +623,9 @@ class ColouringPad(Frame):
             draw = ImageDraw.Draw(self.image)
             wait = PadWait(self.canvas, "Please wait")
             wait.label.wait_visibility()
-            draw.rectangle((x - delta, y - delta, x + delta, y + delta), fill=colour)  # draw a blob
+            draw.rectangle(
+                (x - delta, y - delta, x + delta, y + delta), 
+                fill=colour)  # draw a blob
             wait.quit()
         else:  # dropper
             self.mode.set(self.lastMode)  # reset to what was last used
@@ -588,7 +646,8 @@ class ColouringPad(Frame):
         # place where button pressed
         if self.image:
             # lastx, lasty = self.x, self.y
-            self.x, self.y = self.getPos(event)  # remember where we are for later
+            # remember where we are for later
+            self.x, self.y = self.getPos(event)  
             # print("Pressed:", self.x, self.y)
             self.dragging = True
             # so we can see where the selection starts from ...
@@ -608,7 +667,8 @@ class ColouringPad(Frame):
 
     def getPos(self, event):
         # place where mouse is in event
-        x, y = int(self.canvas.canvasx(event.x)), int(self.canvas.canvasy(event.y))
+        x = int(self.canvas.canvasx(event.x))
+        y = int(self.canvas.canvasy(event.y))
         # print("getPos =", (x, y))
         return x, y
 
