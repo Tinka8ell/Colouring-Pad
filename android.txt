@@ -1,0 +1,3 @@
+title=Colour Pad
+author=Mark Ingamells
+orientation=portrait
