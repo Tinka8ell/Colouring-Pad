@@ -2,25 +2,24 @@
 
 '''
 Add on ideas - width / height and both options for zoom
-Rotate 90 option to fit more on screen (portrait on landsacpe systems)
+Rotate 90 option to fit more on screen (portrait on landscape systems)
 Current selected colour button
 Colour dialog - Select from known names of colours, dropper for grabbing existing colour
 Sorting known colours in some order
 Removal of low use colours with similar used ones - eg nearly black to black ...
 '''
 
-from PIL import Image, ImageTk, ImageDraw, ImageColor
-# from pathlib import Path
+import gc
+import math
+import os
 from tkinter import Frame, Label, Canvas, Menu, Button, Radiobutton, Scale, Toplevel
-# from tkinter import RIGHT
 from tkinter import HORIZONTAL, VERTICAL, E, W, N, S
 from tkinter import Tk, ttk, IntVar, filedialog, messagebox
-# from tkinter import TclError
-# from tkinter import ttk
 from tkinter.colorchooser import askcolor
-import os
-import math
-import gc
+
+from PIL import Image, ImageTk, ImageDraw, ImageColor
+
+from ColourFrame import ColourFrame
 
 
 def PadError(errorText, title="Colouring Pad - Oops!"):
@@ -89,6 +88,7 @@ class ColouringPad(Frame):
         self.colourSelected = IntVar()
         self.mode = IntVar()
         self.mode.set(1)
+        self.lastMode = self.mode.get()
         self.zoom = 100
         self.image = None  # Image.new("RGB", (3000, 3000), color="white")
         self.wait = None
@@ -244,37 +244,22 @@ class ColouringPad(Frame):
         return
 
     def addColours(self):
-        frame = self.frame
         buttonCol, buttonWidth, buttonRow = 1, 2, self.colourRow
-        self.colourStrip = Frame(frame) 
+        self.colourStrip = ColourFrame(self.frame,
+                                       self.used,
+                                       self.colourChanged) 
+        # the rest are defaults:       ,
+        #                              count=32,
+        #                              defaultColour="white")
         self.colourStrip.grid(column=buttonCol, row=buttonRow, 
                               columnspan=buttonWidth, sticky=(N, E, W, S))
-        self.colours = []
-        self.colourSelected.set(0)  # initialise
-        self.chosen = self.used[0]
-        self.oldColour = 0
-        for i in range(32):
-            if i < len(self.used):
-                colour = self.used[i]
-            else:
-                colour = "white"
-            b = Radiobutton(self.colourStrip, variable=self.colourSelected, 
-                            text=" ", value=i, bg=colour, selectcolor=colour, 
-                            indicatoron=0, command=self.colourSet)
-            b.grid(column=i, row=0)
-            b.bind("<Double-Button-1>", self.colour)
-            self.colours.append(b)
+        self.chosen = self.colourStrip.getColour()
         return
 
-    def colourSet(self):
-        if self.oldColour:
-            self.colours[self.oldColour].config(text=" ")
-        selected = self.colourSelected.get()
-        self.colours[selected].config(text="***")
-        chosen = self.colours[selected]["bg"]
+    def colourChanged(self, colour):
+        # called when the colour is changed
         self.undoSaved = False
-        self.chosen = chosen
-        self.oldColour = selected
+        self.chosen = colour
         return
 
     def zoomed(self, event):
@@ -331,22 +316,7 @@ class ColouringPad(Frame):
         return
 
     def colourChange(self):
-        self.colour(None)
-        return
-
-    def colour(self, event):
-        selected = self.colourSelected.get()
-        self.chosen = self.colours[selected]["bg"]
-        # (triple, hexstr) = askcolor(self.chosen)
-        hexstr = askcolor(self.chosen)[1]
-        if hexstr:
-            # print("(triple, hexstr)", (triple, hexstr))
-            self.chosen = hexstr
-            self.colours[selected]["bg"] = hexstr
-            self.colours[selected]["selectcolor"] = hexstr
-            self.undoSaved = False
-            event.widget.deselect() 
-            event.widget.select() 
+        self.colourStrip.changeColour()
         return
 
     def exit(self):
@@ -632,11 +602,7 @@ class ColouringPad(Frame):
             # target is colour to use
             selected = self.colourSelected.get()
             hexstr = "#%02x%02x%02x" % target
-            self.chosen = hexstr
-            self.colours[selected].config(bg=hexstr, selectcolor=hexstr)
-            self.colours[selected].deselect() 
-            self.colours[selected].select() 
-            self.undoSaved = False
+            self.colourStrip.setColour(hexstr)
         self.display()
         self.saved = False
         # print("colourIt() ended")
